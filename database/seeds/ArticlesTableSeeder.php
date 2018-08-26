@@ -3,6 +3,8 @@
 use Illuminate\Database\Seeder;
 use Illuminate\Support\Facades\DB;
 
+use Carbon\Carbon;
+
 class ArticlesTableSeeder extends Seeder
 {
     /**
@@ -32,7 +34,9 @@ class ArticlesTableSeeder extends Seeder
         while (true) {
             DB::table("articles")->insert([
                 "title" => $data[$i]["title"],
-                "contents" => $data[$i]["contents"]
+                "contents" => $data[$i]["contents"],
+                "created_at" => Carbon::now("Asia/Tokyo"),
+                "updated_at" => Carbon::now("Asia/Tokyo")
             ]);
 
             $i++;
