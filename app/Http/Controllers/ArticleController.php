@@ -27,12 +27,7 @@ class ArticleController extends Controller
 
     public function createArticle(Request $request)
     {
-        $article = Article::create([
-            "title" => $request->input("title"),
-            "contents" => $request->input("contents"),
-            "created_at" => Carbon::now("Asia/Tokyo"),
-            "updated_at" => Carbon::now("Asia/Tokyo")
-        ]);
+        $article = Article::create($request->all());
 
         return response()->json($article);
     }
@@ -41,9 +36,15 @@ class ArticleController extends Controller
     public function updateArticle(Request $request, Int $id)
     {
         $article = Article::find($id);
-        $article->title = $request->input("title");
-        $article->contents = $request->input("contents");
-        $article->updated_at = Carbon::now("Asia/Tokyo");
+
+        if ($request->input("title")) {
+            $article->title = $request->input("title");
+        }
+
+        if ($request->input("contents")) {
+            $article->contents = $request->input("contents");
+        }
+
         $article->save();
 
         return response()->json($article);
