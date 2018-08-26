@@ -23,5 +23,10 @@ $router->get(env("VERSION"), function(){
     );
 });
 
-$router->get(env("VERSION")."/articles", "ArticleController@get");
-$router->get(env("VERSION")."/articles/{id}", "ArticleController@getById");
+$router->group(["prefix" => env("VERSION")], function($router){
+    $router->get("article", "ArticleController@index");
+    $router->get("article/{id}", "ArticleController@getArticleById");
+    $router->post("article", "ArticleController@createArticle");
+    $router->put("article/{id}", "ArticleController@updateArticle");
+    $router->delete("article/{id}", "ArticleController@deleteArticle");
+});
