@@ -13,7 +13,18 @@ class ArticleController extends Controller
     {
         $article = Article::all();
 
-        return response()->json($article);
+        if (($count = count($article)) > 0) {
+            $response["status"] = "OK";
+            $response["count"] = $count;
+            $response["data"] = $article;
+        } else {
+            $response["status"] = "NO";
+            $response["error"] = [
+                "message" => "No article exists!"
+            ];
+        }
+
+        return response()->json($response);
     }
 
 
@@ -21,15 +32,35 @@ class ArticleController extends Controller
     {
         $article = Article::find($id);
 
-        return response()->json($article);
+        if (!is_null($article)) {
+            $response["status"] = "OK";
+            $response["data"] = $article;
+        } else {
+            $response["status"] = "NO";
+            $response["error"] = [
+                "message" => "No article exists!"
+            ];
+        }
+
+        return response()->json($response);
     }
 
 
     public function createArticle(Request $request)
     {
-        $article = Article::create($request->all());
+        $requestAll = $request->all();
 
-        return response()->json($article);
+        if (isset($requestAll["title"]) && isset($requestAll["contents"])) {
+            $response["status"] = "OK";
+            $response["data"] = Article::create($requestAll);
+        } else {
+            $response["status"] = "NO";
+            $response["error"] = [
+                "message" => "Missing required arguments!"
+            ];
+        }
+
+        return response()->json($response);
     }
 
 

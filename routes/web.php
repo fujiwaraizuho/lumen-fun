@@ -23,7 +23,7 @@ $router->get(env("VERSION"), function(){
     );
 });
 
-$router->group(["prefix" => env("VERSION")], function($router){
+$router->group(["prefix" => "api/".env("VERSION")], function($router){
     $router->get("article", "ArticleController@index");
     $router->get("article/{id}", "ArticleController@getArticleById");
     $router->post("article", "ArticleController@createArticle");
