@@ -14,17 +14,17 @@ class ArticleController extends Controller
         $article = Article::all();
 
         if (($count = count($article)) > 0) {
-            $response["status"] = "OK";
+            $response["success"] = true;
+            $response["code"] = 200;
             $response["count"] = $count;
             $response["data"] = $article;
         } else {
-            $response["status"] = "NO";
-            $response["error"] = [
-                "message" => "No article exists!"
-            ];
+            $response["success"] = false;
+            $response["code"] = 404;
+            $response["message"] = "No article exists!";
         }
 
-        return response()->json($response);
+        return response()->json($response, $response["code"]);
     }
 
 
@@ -33,16 +33,16 @@ class ArticleController extends Controller
         $article = Article::find($id);
 
         if (!is_null($article)) {
-            $response["status"] = "OK";
+            $response["success"] = true;
+            $response["code"] = 200;
             $response["data"] = $article;
         } else {
-            $response["status"] = "NO";
-            $response["error"] = [
-                "message" => "No article exists!"
-            ];
+            $response["success"] = false;
+            $response["code"] = 404;
+            $response["message"] = "No article exists!";
         }
 
-        return response()->json($response);
+        return response()->json($response, $response["code"]);
     }
 
 
@@ -51,42 +51,80 @@ class ArticleController extends Controller
         $requestAll = $request->all();
 
         if (isset($requestAll["title"]) && isset($requestAll["contents"])) {
-            $response["status"] = "OK";
+            $response["success"] = true;
+            $response["code"] = 201;
             $response["data"] = Article::create($requestAll);
         } else {
-            $response["status"] = "NO";
-            $response["error"] = [
-                "message" => "Missing required arguments!"
-            ];
+            $response["success"] = false;
+            $response["code"] = 400;
+            $response["message"] = "Missing required arguments!";
         }
 
-        return response()->json($response);
+        return response()->json($response, $response["code"]);
     }
 
 
     public function updateArticle(Request $request, Int $id)
     {
         $article = Article::find($id);
+        $title = $request->input("title");
+        $contents = $request->input("contents");
 
-        if ($request->input("title")) {
-            $article->title = $request->input("title");
+        if (!is_null($article)) {
+            if ($title && $contents) {
+                $article->title = $title;
+                $article->contents = $contents;
+                $article->save();
+
+                $response["success"] = true;
+                $response["code"] = 201;
+                $response["data"] = $article;
+            } else {
+                if ($title || $contents) {
+                    if ($title) {
+                        $article->title = $title;
+                    } else if ($contents) {
+                        $article->contents = $contents;
+                    }
+                    $article->save();
+    
+                    $response["success"] = true;
+                    $response["code"] = 201;
+                    $response["data"] = $article;   
+                }
+            }
+
+            if (!$title && !$contents) {
+                $response["success"] = false;
+                $response["code"] = 400;
+                $response["message"] = "No arguments!"; 
+            }
+        } else {
+            $response["success"] = false;
+            $response["code"] = 404;
+            $response["message"] = "No article exists!";
         }
 
-        if ($request->input("contents")) {
-            $article->contents = $request->input("contents");
-        }
-
-        $article->save();
-
-        return response()->json($article);
+        return response()->json($response, $response["code"]);
     }
 
 
     public function deleteArticle(Int $id)
     {
         $article = Article::find($id);
-        $article->delete();
+        
+        if (!is_null($article)) {
+            $article->delete();
 
-        return response()->json($article);
+            $response["success"] = true;
+            $response["code"] = 200;
+            $response["data"] = $article;
+        } else {
+            $response["success"] = false;
+            $response["code"] = 404;
+            $response["message"] = "No article exists!";
+        }
+
+        return response()->json($response, $response["code"]);
     }
 }

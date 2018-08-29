@@ -15,11 +15,11 @@ $router->get('/', function () use ($router) {
     return $router->app->version();
 });
 
-$router->get(env("VERSION"), function(){
-    return response()->json(
-        ['error' => 'Unauthorized'],
-        401,
-        ['X-Header-One' => 'Header Value']
+$router->get("api/".env("VERSION"), function(){
+    return response()->json([
+        "path" => "/api/v1/"
+        ],
+        400
     );
 });
 
