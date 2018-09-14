@@ -17,8 +17,8 @@ build:
         name: Fill mysql env.
         code: |-
           sudo cp .env.example .env
-          sudo sed -i -e "s/DB_USERNAME=homestead/DB_USERNAME=root/g" .env 
-          sudo sed -e "14d" .env
+          sudo cat .env | sudo sed -i -e "s/DB_USERNAME=homestead/DB_USERNAME=root/g"
+          sudo cat .env | sudo tr -d DB_PASSWORD=secret
           
     - script:
         name: Run phpunit
