@@ -18,6 +18,7 @@ build:
         code: |-
           sudo sed -i -e "s/DB_HOST=mysql/DB_HOST=$MYSQL_PORT_3306_TCP_ADDR/g" phpunit.xml
           sudo sed -i -e "s/DB_PORT=3306/DB_PORT=$MYSQL_PORT_3306_TCP_PORT/g" phpunit.xml
+          sudo sed -i -e "s/DB_PASSWORD=password/DB_PASSWORD=$MYSQL_ENV_MYSQL_ROOT_PASSWORD/g" phpunit.xml
 
     - script:
         name: Run phpunit
