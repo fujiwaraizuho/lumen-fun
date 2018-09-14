@@ -18,6 +18,8 @@ build:
         code: |-
           sudo cp .env.example .env.testing
           sudo sed -i -e "s/DB_HOST=127.0.0.1/DB_HOST=$MYSQL_PORT_3306_TCP_ADDR/g" .env.testing
+          sudo sed -i -e "s/DB_PORT=3306/DB_PORT=$MYSQL_PORT_3306_TCP_PORT/g" .env.testing
+          sudo sed -i -e "s/DB_DATABASE=homestead/DB_DATABASE=lumen_fun_test/g" .env.testing
           sudo sed -i -e "s/DB_USERNAME=homestead/DB_USERNAME=root/g" .env.testing
           sudo sed -i -e "s/DB_PASSWORD=secret/DB_PASSWORD=/g" .env.testing
           
