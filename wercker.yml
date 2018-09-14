@@ -19,7 +19,7 @@ build:
           sudo cp .env.example .env.testing
           sudo sed -i -e "s/DB_HOST=127.0.0.1/DB_HOST=$MYSQL_PORT_3306_TCP_ADDR/g" .env.testing
           sudo sed -i -e "s/DB_USERNAME=homestead/DB_USERNAME=root/g" .env.testing
-          sudo tr -d DB_PASSWORD=secret .env.testing
+          sudo sed -i -e "s/DB_PASSWORD=secret/DB_PASSWORD=/g" .env.testing
           
     - script:
         name: Run phpunit
