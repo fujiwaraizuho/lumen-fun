@@ -1,26 +1,25 @@
-box: 
-  - id: php
-    tag: 7.2
-    ports:
-      - "8080"
-
+box: dala00/laravel
 services:
   - id: mysql
     tag: 5.7
     env:
       MYSQL_ALLOW_EMPTY_PASSWORD: "true"
-      MYSQL_DATABASE: "lumen_fun_test"
+      MYSQL_DATABASE: lumen_fun_test
 
 build:
   steps:
-    - install-packages:
-        packages: git
     - script:
-        name: Install Composer
-        code: curl -sS https://getcomposer.org/installer | sudo php -- --install-dir=/usr/local/bin --filename=composer
+        name: Install dependencies
+        code: |
+          composer install
+
     - script:
-        name: Install Dependencies
-        code: composer install -no-interaction
-    - internal/watch:
-        code: php -S 0.0.0.0:8080 -t public
-        reload: true
+        name: Fill mysql env.
+        code: |-
+          sudo sed -i -e "s/DB_HOST=mysql/DB_HOST=$MYSQL_PORT_3306_TCP_ADDR/g" .env.testing
+          sudo sed -i -e "s/DB_PORT=3306/DB_PORT=$MYSQL_PORT_3306_TCP_PORT/g" .env.testing
+
+    - script:
+        name: Run phpunit
+        code: |-
+          vendor/bin/phpunit
