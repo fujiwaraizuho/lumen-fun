@@ -3,8 +3,7 @@ services:
   - id: mysql
     tag: 5.7
     env:
-      MYSQL_USER: fujiwaraizuho
-      MYSQL_PASSWORD: password
+      MYSQL_ALLOW_EMPTY_PASSWORD: true
       MYSQL_DATABASE: lumen_fun_test
       
 build:
@@ -18,11 +17,9 @@ build:
         name: Fill mysql env.
         code: |-
           sudo cp .env.example .env
-          sudo cat .env | sudo sed -i -e "s/DB_HOST=127.0.0.1/DB_HOST=$MYSQL_PORT_3306_TCP_ADDR/g" .env
-          sudo cat .env | sudo sed -i -e "s/DB_PORT=3306/DB_PORT=$MYSQL_PORT_3306_TCP_PORT/g" .env
-          sudo cat .env | sudo sed -i -e "s/DB_USERNAME=homestead/DB_USERNAME=fujiwaraizuho/g" .env
-          sudo cat .env | sudo sed -i -e "s/DB_PASSWORD=secret/DB_PASSWORD=password/g" .env
-
+          sudo sed -i -e "s/DB_USERNAME=homestead/DB_USERNAME=root/g" .env 
+          sudo sed -e "14d" .env
+          
     - script:
         name: Run phpunit
         code: |-
