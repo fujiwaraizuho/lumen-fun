@@ -25,7 +25,8 @@ build:
 
     - script:
         name: Check PHP
-        code: |
+        code: |-
+          mysqladmin version
           php -i | grep socket
 
     - script:
