@@ -1,10 +1,4 @@
 box: dala00/laravel:7.2
-services:
-  - id: mysql
-    tag: 5.7
-    env:
-      MYSQL_ROOT_PASSWORD: password
-      MYSQL_DATABASE: lumen_fun_test
 
 build:
   steps:
@@ -14,20 +8,11 @@ build:
           composer install
 
     - script:
-        name: Check MySQL Socket
+        name: Create .env
         code: |
-          mysql -uroot -p password -e "show variables like '%sock%';"
-
-    - script:
-        name: Fill mysql env.
-        code: |-
-          sudo cp .env.example .env.testing
-          sudo sed -i -e "s/DB_HOST=mysql/DB_HOST=$MYSQL_PORT_3306_TCP_ADDR/g" .env.testing
-          sudo sed -i -e "s/DB_PORT=3306/DB_PORT=$MYSQL_PORT_3306_TCP_PORT/g" .env.testing
-          sudo sed -i -e "s/DB_USERNAME=homestead/DB_USERNAME=root/g" .env.testing
-          sudo sed -i -e "s/DB_PASSWORD=homestead/DB_PASSWORD=password/g" .env.testing
+          sudo cp .env.example .env
 
     - script:
         name: Run phpunit
-        code: |-
+        code: |
           vendor/bin/phpunit
