@@ -1,6 +1,6 @@
 box: dala00/laravel:7.2
 
-build:
+test:
   steps:
     - script:
         name: Install dependencies
@@ -14,5 +14,9 @@ build:
 
     - script:
         name: Run phpunit
-        code: |-
+        code: |
           vendor/bin/phpunit
+
+  after-steps:
+        ytakky2014/line-notifier:
+            access_token: $PERSONAL_ACCESS_TOKEN
