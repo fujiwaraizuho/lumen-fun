@@ -26,7 +26,7 @@ build:
     - script:
         name: Check PHP
         code: |-
-          mysql -uroot -p < SHOW VARIABLES like 'socket'
+          mysql -uroot -p password < SHOW VARIABLES like 'socket'
           php -i | grep socket
 
     - script:
