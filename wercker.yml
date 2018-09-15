@@ -17,7 +17,7 @@ build:
         name: Check MySQL Socket
         code: |
           sudo ls -a /var/lib/
-          sudo ls -a /var/lib/mysql/mysql.sock
+          sudo ls -a /tmp/
 
     - script:
         name: Fill mysql env.
