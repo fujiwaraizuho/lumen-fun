@@ -16,7 +16,7 @@ build:
     - script:
         name: Check MySQL Socket
         code: |
-          mysql_config --socket
+          ps auxf | grep mysql
 
     - script:
         name: Fill mysql env.
