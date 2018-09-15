@@ -4,8 +4,6 @@ services:
     tag: 5.7
     env:
       MYSQL_ROOT_PASSWORD: password
-      MYSQL_USER: admin
-      MYSQL_PASSWORD: password
       MYSQL_DATABASE: lumen_fun_test
 
 build:
@@ -19,15 +17,10 @@ build:
         name: Fill mysql env.
         code: |-
           sudo cp .env.example .env.testing
-          sudo sed -i -e "s/DB_HOST=127.0.0.1/DB_HOST=$MYSQL_PORT_3306_TCP_ADDR/g" .env.testing
-          sudo sed -i -e "s/DB_USERNAME=homestead/DB_USERNAME=admin/g" .env.testing
-          sudo sed -i -e "s/DB_PASSWORD=secret/DB_PASSWORD=password/g" .env.testing
-
-    - script:
-        name: Check PHP
-        code: |-
-          mysql -uroot -p password < SHOW VARIABLES like 'socket'
-          php -i | grep socket
+          sudo sed -i -e "s/DB_HOST=mysql/DB_HOST=$MYSQL_PORT_3306_TCP_ADDR/g" .env.testing
+          sudo sed -i -e "s/DB_PORT=3306/DB_PORT=$MYSQL_PORT_3306_TCP_PORT/g" .env.testing
+          sudo sed -i -e "s/DB_USERNAME=homestead/DB_USERNAME=root/g" .env.testing
+          sudo sed -i -e "s/DB_PASSWORD=homestead/DB_PASSWORD=password/g" .env.testing
 
     - script:
         name: Run phpunit
