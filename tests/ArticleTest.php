@@ -1,7 +1,5 @@
 <?php
 
-use Laravel\Lumen\Testing\DatabaseMigrations;
-use Laravel\Lumen\Testing\DatabaseTransactions;
 use Illuminate\Support\Facades\Artisan;
 
 class ArticleTest extends TestCase
@@ -15,25 +13,59 @@ class ArticleTest extends TestCase
 
     public function testIndex()
     {
-        $this->markTestIncomplete(
-            "このテストは、まだ実装されていましぇん…"
-        );
+        $this->get("/api/".env("VERSION")."/article")
+            ->seeJson([
+                "status" => "OK",
+                "count" => 3
+            ]);
+    }
+
+
+    public function testIndexNoArticle()
+    {
+        Artisan::call("migrate:refresh");
+        $this->get("/api/".env("VERSION")."/article")
+            ->seeJson([
+                "status" => "NO",
+            ]);
+        (new \DatabaseSeeder())->run();
     }
 
 
     public function testGetArticleById()
     {
-        $this->markTestIncomplete(
-            "このテストは、まだ実装されていましぇん…"
-        );
+        $this->get("/api/".env("VERSION")."/article/1")
+            ->seeJson([
+                "status" => "OK"
+            ]);
+    }
+
+
+    public function testGetNoArticleExistsById()
+    {
+        $this->get("/api/".env("VERSION")."/article/4")
+            ->seeJson([
+                "status" => "NO"
+            ]);
     }
 
 
     public function testCreateArticle()
     {
-        $this->markTestIncomplete(
-            "このテストは、まだ実装されていましぇん…"
-        );
+        $param = [
+            "title" => "title3",
+            "contents" => "contents3"
+        ];
+
+        $this->post("/api/".env("VERSION")."/article", $param)
+            ->seeJson([
+                "status" => "OK",
+            ]);
+
+        $this->get("/api/".env("VERSION")."/article/4")
+            ->seeJson([
+                "status" => "OK"
+            ]);
     }
 
 
