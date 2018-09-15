@@ -16,7 +16,3 @@ build:
         name: Run phpunit
         code: |
           vendor/bin/phpunit
-
-  after-steps:
-        ytakky2014/line-notifier:
-            access_token: $PERSONAL_ACCESS_TOKEN
