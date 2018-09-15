@@ -16,8 +16,7 @@ build:
     - script:
         name: Check MySQL Socket
         code: |
-          sudo ls -a /var/lib/
-          sudo ls -a /tmp/
+　　　　　　mysql -uroot -p fujiwaraizuho -e "show variables like '%sock%';"
 
     - script:
         name: Fill mysql env.
