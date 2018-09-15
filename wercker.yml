@@ -1,6 +1,6 @@
 box: dala00/laravel:7.2
 
-test:
+build:
   steps:
     - script:
         name: Install dependencies
