@@ -14,6 +14,11 @@ build:
           composer install
 
     - script:
+        name: Check MySQL Socket
+        code: |
+          ls -a /var/lib/mysql/mysql.sock
+
+    - script:
         name: Fill mysql env.
         code: |-
           sudo cp .env.example .env.testing
