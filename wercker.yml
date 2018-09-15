@@ -24,6 +24,11 @@ build:
           sudo sed -i -e "s/DB_PASSWORD=secret/DB_PASSWORD=password/g" .env.testing
 
     - script:
+        name: Check PHP
+        code: |
+          php -i | grep socket
+
+    - script:
         name: Run phpunit
         code: |-
           vendor/bin/phpunit
