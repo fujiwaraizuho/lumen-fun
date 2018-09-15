@@ -10,13 +10,13 @@ build:
   steps:
     - script:
         name: Install dependencies
-        code: |-
+        code: |
           composer install
 
     - script:
         name: Check MySQL Socket
-        code: |-
-　　　　　　mysql_config --socket
+        code: |
+          mysql_config --socket
 
     - script:
         name: Fill mysql env.
