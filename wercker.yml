@@ -8,6 +8,11 @@ build:
           composer install
 
     - script:
+        name: Create .env
+        code: |
+          sudo cp .env.example .env
+
+    - script:
         name: Run phpunit
         code: |-
           vendor/bin/phpunit
