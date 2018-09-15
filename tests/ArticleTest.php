@@ -13,9 +13,10 @@ class ArticleTest extends TestCase
 
     public function testIndex()
     {
-        $this->get("/api/".env("VERSION")."/article")
+        $this->json("GET", "/api/".env("VERSION")."/article")
             ->seeJson([
-                "status" => "OK",
+                "success" => true,
+                "code" => 200,
                 "count" => 3
             ]);
     }
@@ -24,9 +25,10 @@ class ArticleTest extends TestCase
     public function testIndexNoArticle()
     {
         Artisan::call("migrate:refresh");
-        $this->get("/api/".env("VERSION")."/article")
+        $this->json("GET", "/api/".env("VERSION")."/article")
             ->seeJson([
-                "status" => "NO",
+                "success" => false,
+                "code" => 404
             ]);
         (new \DatabaseSeeder())->run();
     }
@@ -34,18 +36,20 @@ class ArticleTest extends TestCase
 
     public function testGetArticleById()
     {
-        $this->get("/api/".env("VERSION")."/article/1")
+        $this->json("GET", "/api/".env("VERSION")."/article/1")
             ->seeJson([
-                "status" => "OK"
+                "success" => true,
+                "code" => 200
             ]);
     }
 
 
     public function testGetNoArticleExistsById()
     {
-        $this->get("/api/".env("VERSION")."/article/4")
+        $this->json("GET", "/api/".env("VERSION")."/article/4")
             ->seeJson([
-                "status" => "NO"
+                "success" => false,
+                "code" => 404
             ]);
     }
 
@@ -57,30 +61,47 @@ class ArticleTest extends TestCase
             "contents" => "contents3"
         ];
 
-        $this->post("/api/".env("VERSION")."/article", $param)
+        $this->json("POST", "/api/".env("VERSION")."/article", $param)
             ->seeJson([
-                "status" => "OK",
+                "success" => true,
+                "code" => 201
             ]);
 
-        $this->get("/api/".env("VERSION")."/article/4")
+        $this->json("GET", "/api/".env("VERSION")."/article/4")
             ->seeJson([
-                "status" => "OK"
+                "success" => true,
+                "code" => 200
             ]);
     }
 
 
     public function testUpdateArticle()
     {
-        $this->markTestIncomplete(
-            "このテストは、まだ実装されていましぇん…"
-        );
+        $param = [
+            "title" => "fujishan",
+            "contents" => "fujishan is cool!"
+        ];
+
+        $this->json("PUT", "/api/".env("VERSION")."/article/3", $param)
+            ->seeJson([
+                "success" => true,
+                "code" => 201,
+            ]);
+
+        $this->json("GET", "/api/".env("VERSION")."/article/3")
+            ->seeJson([
+                "success" => true,
+                "code" => 200,
+            ]);
     }
 
 
     public function testDeleteArticle()
     {
-        $this->markTestIncomplete(
-            "このテストは、まだ実装されていましぇん…"
-        );
+        $this->json("DELETE", "/api/".env("VERSION")."/article/3")
+            ->seeJson([
+                "success" => true,
+                "code" => 200
+            ]);
     }
 }
