@@ -16,7 +16,7 @@ build:
     - script:
         name: Check MySQL Socket
         code: |-
-　　　　　　mysql -uroot -p password -e "show variables like '%sock%';"
+　　　　　　mysql_config --socket
 
     - script:
         name: Fill mysql env.
