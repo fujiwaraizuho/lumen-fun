@@ -58,7 +58,7 @@ class ArticleTest extends TestCase
     {
         $param = [
             "title" => "title3",
-            "contents" => "contents3"
+            "contents" => "contents33"
         ];
 
         $this->json("POST", "/api/".env("VERSION")."/article", $param)
